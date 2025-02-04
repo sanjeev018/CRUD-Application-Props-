@@ -7,14 +7,23 @@ interface Student {
     mobile: string;
     batch: string;
   }
-  
 
+interface StudentFormProps { 
+  handleSubmit:(student:Student) => void; 
+}
 
-const StudentForm = ({handleSubmit}) => {
+const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
      const [name , setName] = useState<string>("")
       const [email , setEmail] = useState<string>("")
       const [mobile , setMobile] = useState<string>("")
       const [batch , setBatch] = useState<string>("")
+
+    const resetForm = () => { 
+    setName('')
+    setEmail('')
+    setMobile('')
+    setBatch('') 
+  }
     
   return (
     <div>
@@ -56,7 +65,15 @@ const StudentForm = ({handleSubmit}) => {
             value={batch}
             onChange={(e)=> setBatch(e.target.value)}
             />   
-            <button type='submit' onClick={handleSubmit} className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer'>Submit</button>
+            <button type='submit' onClick={()=> handleSubmit(
+              {
+              name,
+              email,
+              mobile,
+              batch,
+            },
+            resetForm
+            )} className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer'>Submit</button>
         </div>
     </div>
   )
