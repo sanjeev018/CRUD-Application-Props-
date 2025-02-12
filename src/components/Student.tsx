@@ -15,8 +15,8 @@ const Student = () => {
  
   const [students, setStudents] = useState<Student[]>([])
 
-const handleSubmit = (values:any, resetForm) => { 
-  const {name, email, mobile, batch} = values
+const handleSubmit = (values:any, resetForm:any) => { 
+  const {name, email, mobile, batch, gender} = values
 
   console.log( "values",values)
 
@@ -25,13 +25,13 @@ const data = {
   email,
   mobile,
   batch,
-  gender:"MALE",
+  gender,
   id: `${name}-${mobile}`
 };
 
 console.log(data, "data")
 setStudents([...students , data],)
-resetForm()
+resetForm();
 }
 
   return (

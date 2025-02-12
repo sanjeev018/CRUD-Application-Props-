@@ -29,7 +29,7 @@ const StudentTable: React.FC<StudentTableProps> = ({students}) => {
   <tbody className='border-2'>
     {students?.map((student: any, index:any)=> { 
       return ( 
-        <tr key={index}>
+        <tr key={student?.id}>
            <td>{student?.name}</td>
            <td>{student?.gender}</td>
            <td>{student?.email}</td>

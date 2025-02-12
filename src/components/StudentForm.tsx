@@ -6,10 +6,11 @@ interface Student {
     email: string;
     mobile: string;
     batch: string;
+    gender:string;
   }
 
 interface StudentFormProps { 
-  handleSubmit:(student:Student) => void; 
+  handleSubmit:(student:Student, resetForm:()=> void) => void; 
 }
 
 const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
@@ -17,12 +18,16 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
       const [email , setEmail] = useState<string>("")
       const [mobile , setMobile] = useState<string>("")
       const [batch , setBatch] = useState<string>("")
+      const [gender , setGender] = useState<string>("")
+
+      console.log(gender)
 
     const resetForm = () => { 
     setName('')
     setEmail('')
     setMobile('')
     setBatch('') 
+    setGender('')
   }
     
   return (
@@ -38,8 +43,37 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
 
             {/* {Gender} */}
 
-            <div>
-                <input name='Gender' type="radio" />
+           <label htmlFor="">Gender</label>
+           <div>
+                <input 
+                name='gender' 
+                value="MALE" 
+                onChange={()=> {setGender("MALE")}} 
+                type="radio"
+                id='MALE'
+                checked={gender == "MALE"}
+                />
+                <label htmlFor="MALE">Male</label>
+                <input 
+                name='gender' 
+                value="FEMALE" 
+                onChange={()=> {setGender("FEMALE")}} 
+                type="radio"
+                id='FEMALE'
+                checked={gender == "FEMALE"}
+                />
+                <label htmlFor="FEMALE">Female</label>
+
+                <input 
+                name='gender' 
+                value="OTHER" 
+                onChange={()=> {setGender("OTHER")}} 
+                type="radio"
+                id='OTHER'
+                checked={gender == "OTHER"}
+                />
+                <label htmlFor="OTHER">Other</label>
+
             </div>
 
             {/* {Email} */}
@@ -71,6 +105,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
               email,
               mobile,
               batch,
+              gender,
             },
             resetForm
             )} className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer'>Submit</button>
