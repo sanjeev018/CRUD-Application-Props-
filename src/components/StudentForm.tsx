@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ATMTextField from './atoms/ATMTextField';
+import ATMSelect from './atoms/ATMSelect';
 
 interface Student {
     name: string;
@@ -20,7 +21,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
       const [batch , setBatch] = useState<string>("")
       const [gender , setGender] = useState<string>("")
 
-      console.log(gender)
+      console.log(batch, "batch")
 
     const resetForm = () => { 
     setName('')
@@ -29,6 +30,10 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
     setBatch('') 
     setGender('')
   }
+
+  const genderOptions = ["Male" , "Female", "Other"]
+  const batches = ["Mern","Mean", "Mevn"]
+  const isValid = mobile.length === 10
     
   return (
     <div>
@@ -42,8 +47,26 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             /> 
 
             {/* {Gender} */}
+            <label htmlFor=""> Gender</label>
+            
+            <div className='flex gap-x-1'>
+              {genderOptions.map((el)=> { 
+                const isSelected = el === gender
+                return( 
+                  <button 
+                  onClick={()=> setGender(el)} 
+                  className={isSelected ? "bg-blue-500 p-2 duration-300 ease-in text-amber-50 border-1":"p-2 border-1"}
+                  key={el}
+                  >
+                    {el}
+                  </button>
 
-           <label htmlFor="">Gender</label>
+                )
+              })}
+             
+            </div>
+
+            {/* <label htmlFor="">Gender</label>
            <div>
                 <input 
                 name='gender' 
@@ -73,8 +96,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
                 checked={gender == "OTHER"}
                 />
                 <label htmlFor="OTHER">Other</label>
-
-            </div>
+            </div> */}
 
             {/* {Email} */}
             <ATMTextField 
@@ -93,13 +115,14 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
              /> 
 
             {/* {Batch} */}
-            <ATMTextField 
-            label="Batch" 
-            placeholder='Enter your Batch'
+            <ATMSelect 
             value={batch}
             onChange={(e)=> setBatch(e.target.value)}
-            />   
-            <button type='submit' onClick={()=> handleSubmit(
+            options={batches}
+            placeholder={"Select batch"}
+            label='Batch'
+            /> 
+            <button disabled={!isValid} type='submit' onClick={()=> handleSubmit(
               {
               name,
               email,
