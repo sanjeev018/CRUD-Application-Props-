@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 interface Student {
   name: string;
@@ -13,6 +13,8 @@ interface StudentTableProps {
 }
 
 const StudentTable: React.FC<StudentTableProps> = ({students}) => {
+  const [selectedStudent, setSelectedStudent] = useState(null)
+  console.log(selectedStudent)
   return (
     <div>
          <div className=''>
@@ -24,6 +26,7 @@ const StudentTable: React.FC<StudentTableProps> = ({students}) => {
     <th align='left'> Email </th>
     <th align='left'> Mobile </th>
     <th align='left'> Batch </th>
+    <th align='left'> Actions </th>
     </tr>
   </thead>
   <tbody className='border-2'>
@@ -35,6 +38,7 @@ const StudentTable: React.FC<StudentTableProps> = ({students}) => {
            <td>{student?.email}</td>
            <td>{student?.mobile}</td>
            <td>{student?.batch}</td>
+           <td> <button type='button' onClick={()=> setSelectedStudent(student)}> Edit </button>  </td>
          </tr> 
       )
     })} 

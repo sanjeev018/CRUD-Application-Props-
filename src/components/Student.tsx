@@ -29,9 +29,9 @@ const data = {
   id: `${name}-${mobile}`
 };
 
-console.log(data, "data")
+// console.log(data, "data")
 setStudents([...students , data],)
-resetForm();
+resetForm?.();
 }
 
   return (

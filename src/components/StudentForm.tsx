@@ -11,15 +11,10 @@ interface Student {
   }
 
 interface StudentFormProps { 
-  handleSubmit:(student:Student, resetForm:()=> void) => void; 
+  handleSubmit:(student:Student , resetForm:()=> void) => void; 
 }
 
 const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
-     const [name , setName] = useState<string>("")
-      const [email , setEmail] = useState<string>("")
-      const [mobile , setMobile] = useState<string>("")
-      const [batch , setBatch] = useState<string>("")
-      const [gender , setGender] = useState<string>("")
 
       const initialValues = { 
         name:"",
@@ -30,22 +25,29 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
       }; 
 
       const [values, setValues] = useState(initialValues); 
-      const {name,email,mobile,batch,gender} = initialValues
+      const {name , email , mobile, batch, gender } = values
 
+      const setFieldValue = (fieldName:keyof Student, value:string) => { 
+        const newValues = { 
+          ...values, 
+          [fieldName]: value,
+        };
+        setValues(newValues);
+      };
+      // console.log(values, "values");
+      
+    const resetForm = () => { 
+   setValues(initialValues)
+  }
 
-  //   const resetForm = () => { 
-  //   setName('')
-  //   setEmail('')
-  //   setMobile('')
-  //   setBatch('') 
-  //   setGender('')
-  // }
+  const genderOptions = ["Male" , "Female", "Other"]
+  const batches = ["Mern","Mean", "Mevn"]
+  const indianMobileRegex = /^(?:\+91)?[6-9]\d{9}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
-  // const genderOptions = ["Male" , "Female", "Other"]
-  // const batches = ["Mern","Mean", "Mevn"]
-  // const indianMobileRegex = /^(?:\+91)?[6-9]\d{9}$/;
-  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  // const isValid = indianMobileRegex.test(mobile) && emailRegex.test(email)
+  const isValid = 
+  indianMobileRegex.test(mobile) 
+  && emailRegex.test(email)
 
   return (
     <div>
@@ -55,7 +57,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             label="Name" 
             placeholder='Enter your Name'
             value={name}
-            onChange={(e)=> setName(e.target.value)}
+            onChange={(e)=> setFieldValue("name" , e.target.value)}
             /> 
 
             {/* {Gender} */}
@@ -65,7 +67,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
                 const isSelected = el === gender   
                 return( 
                   <button 
-                  onClick={()=> setGender(el)} 
+                  onClick={()=> setFieldValue("gender" , el)} 
                   className={isSelected ? "bg-blue-500 p-2 duration-300 ease-in text-amber-50 border-1":"p-2 border-1"}
                   key={el}
                   >
@@ -80,24 +82,28 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             label="Email" 
             placeholder='Enter your Email'
             value={email}
-            onChange={(e)=> setEmail(e.target.value)}
+            onChange={(e)=> setFieldValue("email" , e.target.value)}
             /> 
             {/* {Mobile} */}
             <ATMTextField 
             label="Mobile"
             placeholder='Enter your Number'
             value={mobile}
-            onChange={(e)=> setMobile(e.target.value)}
+            onChange={(e)=> setFieldValue("mobile",e.target.value)}
              /> 
             {/* {Batch} */}
             <ATMSelect 
             value={batch}
-            onChange={(e)=> setBatch(e.target.value)}
+            onChange={(e)=> setFieldValue("batch" ,  e.target.value)}
             options={batches}
             placeholder={"Select batch"}
             label='Batch'
             /> 
-            <button disabled={!isValid} type='submit' onClick={()=> handleSubmit(
+            <button 
+            disabled={!isValid} 
+            type='submit' 
+            onClick={()=>
+              handleSubmit(
               {
               name,
               email,
@@ -106,7 +112,8 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
               gender,
             },
             resetForm
-            )} className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer disabled:bg-amber-100 disabled:text-black'>Submit</button>
+            )} 
+            className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer disabled:bg-amber-100 disabled:text-black'>Submit</button>
         </div>
     </div>
   )
