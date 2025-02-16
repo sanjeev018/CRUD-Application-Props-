@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 interface Student {
+  id:string;
   name: string;
   gender: string;
   email: string;
@@ -9,12 +10,24 @@ interface Student {
 }
 
 interface StudentTableProps {
-  students: Student[]; // Define students as an array of Student objects
+  students: Student[];
+  setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
+  setSelectedStudent: React.Dispatch<React.SetStateAction<Student | null>>; 
+   // Define students as an array of Student objects
 }
 
-const StudentTable: React.FC<StudentTableProps> = ({students}) => {
-  const [selectedStudent, setSelectedStudent] = useState(null)
-  console.log(selectedStudent)
+const StudentTable: React.FC<StudentTableProps> = ({students, setStudents , setSelectedStudent}) => {
+
+  const handleDelete = (studentId:string) => { 
+  const filtedStudents = students.filter((student)=> { 
+    return student?.id !== studentId
+  })
+  setStudents(filtedStudents)
+  }
+
+  const handleEdit = (student:Student) => { 
+setSelectedStudent(student)
+  }
   return (
     <div>
          <div className=''>
@@ -38,7 +51,24 @@ const StudentTable: React.FC<StudentTableProps> = ({students}) => {
            <td>{student?.email}</td>
            <td>{student?.mobile}</td>
            <td>{student?.batch}</td>
-           <td> <button type='button' onClick={()=> setSelectedStudent(student)}> Edit </button>  </td>
+           <td> 
+           <div className='flex gap-1'>
+             <button
+            onClick={()=> {handleEdit(student)}}
+            className='bg-blue-500 px-3 text-white rounded-md border border-black cursor-pointer'   
+             >
+               Edit
+             </button>
+
+           <button 
+            type='button' 
+            onClick={()=> handleDelete(student?.id)}
+            className='bg-red-500 text-white rounded-md border border-black cursor-pointer'
+            >
+               Delete 
+            </button>
+             </div> 
+            </td>
          </tr> 
       )
     })} 

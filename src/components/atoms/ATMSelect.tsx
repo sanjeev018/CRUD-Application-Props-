@@ -18,9 +18,12 @@ const ATMSelect: React.FC<ATMSelectProps> = ({ value, onChange, options, label, 
             className='w-full border-1 py-1'
              >
               <option disabled>{placeholder}</option>
-              {options?.map((batchEle)=> { 
+              {options?.map((batchEle,i)=> { 
                 return( 
-                  <option value={batchEle}>{batchEle}</option>
+                  <option 
+                  value={batchEle}
+                  key={i}
+                  >{batchEle}</option>
                 )
               })}
 

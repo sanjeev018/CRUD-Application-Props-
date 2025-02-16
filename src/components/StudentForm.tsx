@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ATMTextField from './atoms/ATMTextField';
 import ATMSelect from './atoms/ATMSelect';
 
@@ -11,10 +11,14 @@ interface Student {
   }
 
 interface StudentFormProps { 
-  handleSubmit:(student:Student , resetForm:()=> void) => void; 
+  handleSubmit:(
+    student:Student,
+    resetForm:()=> void) => void,
+    selectedStudent?: Student;
 }
 
-const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
+const StudentForm : React.FC<StudentFormProps> = ({handleSubmit , selectedStudent}) => {
+
 
       const initialValues = { 
         name:"",
@@ -23,9 +27,13 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
         batch:"",
         gender:"",
       }; 
+      console.log(selectedStudent,"from initialValues")
 
       const [values, setValues] = useState(initialValues); 
-      const {name , email , mobile, batch, gender } = values
+      useEffect(()=> { 
+        setValues(selectedStudent || initialValues)
+      },[selectedStudent])
+      // const {name , email  , mobile, batch, gender } = values
 
       const setFieldValue = (fieldName:keyof Student, value:string) => { 
         const newValues = { 
@@ -34,7 +42,6 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
         };
         setValues(newValues);
       };
-      // console.log(values, "values");
       
     const resetForm = () => { 
    setValues(initialValues)
@@ -46,8 +53,8 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
   const isValid = 
-  indianMobileRegex.test(mobile) 
-  && emailRegex.test(email)
+  indianMobileRegex.test(values?.mobile) 
+  && emailRegex.test(values?.email)
 
   return (
     <div>
@@ -56,7 +63,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             <ATMTextField              
             label="Name" 
             placeholder='Enter your Name'
-            value={name}
+            value={values?.name}
             onChange={(e)=> setFieldValue("name" , e.target.value)}
             /> 
 
@@ -64,7 +71,7 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             <label htmlFor=""> Gender</label>              
             <div className='flex gap-x-1'>             
               {genderOptions.map((el)=> { 
-                const isSelected = el === gender   
+                const isSelected = el === values?.gender   
                 return( 
                   <button 
                   onClick={()=> setFieldValue("gender" , el)} 
@@ -81,19 +88,19 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             <ATMTextField 
             label="Email" 
             placeholder='Enter your Email'
-            value={email}
+            value={values?.email}
             onChange={(e)=> setFieldValue("email" , e.target.value)}
             /> 
             {/* {Mobile} */}
             <ATMTextField 
             label="Mobile"
             placeholder='Enter your Number'
-            value={mobile}
+            value={values?.mobile}
             onChange={(e)=> setFieldValue("mobile",e.target.value)}
              /> 
             {/* {Batch} */}
             <ATMSelect 
-            value={batch}
+            value={values?.batch}
             onChange={(e)=> setFieldValue("batch" ,  e.target.value)}
             options={batches}
             placeholder={"Select batch"}
@@ -105,15 +112,18 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit}) => {
             onClick={()=>
               handleSubmit(
               {
-              name,
-              email,
-              mobile,
-              batch,
-              gender,
+              name:values?.name,
+              email:values?.email,
+              mobile:values?.mobile,
+              batch:values?.batch,
+              gender:values?.gender,
             },
             resetForm
             )} 
-            className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer disabled:bg-amber-100 disabled:text-black'>Submit</button>
+            className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer
+             disabled:bg-amber-100 disabled:text-black'>
+              Submit
+              </button>
         </div>
     </div>
   )
