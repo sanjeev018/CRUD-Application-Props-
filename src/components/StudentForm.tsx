@@ -11,14 +11,17 @@ interface Student {
   }
 
 interface StudentFormProps { 
-  handleSubmit:(
-    student:Student,
-    resetForm:()=> void) => void,
+  handleSubmit:( student:Student,resetForm:()=> void) => void,
+  handleUpdate:( student:Student,resetForm:()=> void) => void,
     selectedStudent?: Student;
 }
 
-const StudentForm : React.FC<StudentFormProps> = ({handleSubmit , selectedStudent}) => {
+const genderOptions = ["Male" , "Female", "Other"]
+const batches = ["Mern","Mean", "Mevn"]
+const indianMobileRegex = /^(?:\+91)?[6-9]\d{9}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
+const StudentForm : React.FC<StudentFormProps> = ({handleSubmit , selectedStudent , handleUpdate}) => {
 
       const initialValues = { 
         name:"",
@@ -46,11 +49,6 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit , selectedStuden
     const resetForm = () => { 
    setValues(initialValues)
   }
-
-  const genderOptions = ["Male" , "Female", "Other"]
-  const batches = ["Mern","Mean", "Mevn"]
-  const indianMobileRegex = /^(?:\+91)?[6-9]\d{9}$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
   const isValid = 
   indianMobileRegex.test(values?.mobile) 
@@ -109,17 +107,33 @@ const StudentForm : React.FC<StudentFormProps> = ({handleSubmit , selectedStuden
             <button 
             disabled={!isValid} 
             type='submit' 
-            onClick={()=>
-              handleSubmit(
-              {
-              name:values?.name,
-              email:values?.email,
-              mobile:values?.mobile,
-              batch:values?.batch,
-              gender:values?.gender,
-            },
-            resetForm
-            )} 
+            onClick={()=> 
+            {
+              if( selectedStudent !== null){ 
+                handleUpdate( 
+                  { 
+                    name:values?.name,
+                    email:values?.email,
+                    mobile:values?.mobile,
+                    batch:values?.batch,
+                    gender:values?.gender,
+                  },
+                  resetForm
+                );
+              }else{ 
+                handleSubmit(
+                  {
+                  name:values?.name,
+                  email:values?.email,
+                  mobile:values?.mobile,
+                  batch:values?.batch,
+                  gender:values?.gender,
+                  // id: selectedStudent.id,
+                },
+                resetForm
+                )
+              }
+             } }
             className='bg-green-400 py-1 rounded-md w-full mt-2 cursor-pointer
              disabled:bg-amber-100 disabled:text-black'>
               Submit

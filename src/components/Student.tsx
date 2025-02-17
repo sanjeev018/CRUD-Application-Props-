@@ -11,13 +11,7 @@ interface Student {
   id: string; 
 }
 
-interface StudentFormProps {
-  selectedStudent?: Student | null; 
-}
-
-// const StudentTable: React.FC<StudentTableProps> = ({students, setStudents , setSelectedStudent}) => {
-
-const Student: React.FC<StudentFormProps> = () => {
+const Student= () => {
  
   const [students, setStudents] = useState<Student[]>([])
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null) 
@@ -33,10 +27,23 @@ const data = {
   gender,
   id: `${name}-${mobile}`
 };
-
-// console.log(data, "data")
 setStudents([...students , data],)
 resetForm?.();
+}
+
+const handleUpdate = (values:Student, resetForm?:()=>void) => { 
+  const result = students?.map((student)=> { 
+    if(student?.id == selectedStudent?.id){ 
+      student = { 
+        ...values,
+        id: selectedStudent?.id,
+      };
+    }
+    return student;
+  })
+  setStudents(result)
+  resetForm?.(); 
+  setSelectedStudent(null)
 }
 
   return (
@@ -44,7 +51,11 @@ resetForm?.();
       {/* Student Data */}
       <div className='flex'>
       <div>
-     <StudentForm handleSubmit={handleSubmit} selectedStudent={selectedStudent || }/> 
+     <StudentForm 
+     handleSubmit={handleSubmit} 
+     handleUpdate={handleUpdate}
+     selectedStudent={selectedStudent} 
+     /> 
      </div>
      <div className='grow'>
         {/* Student Table */}
